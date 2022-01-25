@@ -1,8 +1,14 @@
 # Reservation API
 
 This repo demonstrates how to create a reservation import API using Ruby on Rails.
-The problem is, we need to have a single API that can consume different kinds of payload from different partners.
-Therefore, I use _Form Object Pattern_ and _Polymorphism_ to approach the solution
+The problem is, we need to have a single API that can consume different kinds of payload from different partners, 
+for example a reservation payload from Airbnb and a reservation payload from Booking.com.
+
+For this, I used _Form Object Pattern_ and _Polymorphism_ to approach the solution
+
+## Problem statement
+There's a case where we need to have a single API that is able to parse different reservation payloads.
+The payloads are given by these json data:
 
 **Payload #1**
 ```console
@@ -60,7 +66,17 @@ Therefore, I use _Form Object Pattern_ and _Polymorphism_ to approach the soluti
 }
 ```
 
-We want to have them stored into Reservation and Guest tables.
+We want to have them stored into DB.
+
+## Database Design
+
+We have two tables for this problem, `reservations` and `guests` tables.
+
+![image](https://user-images.githubusercontent.com/42140237/150980089-34c8e556-40f9-469d-bb1b-8bce365ca0a5.png)
+
+Notes:
+- We skip some fields because they are not very useful. For example, the `nights` and `guests` fields from payload. `nights` can be calculated from `start_date` and `end_date` fields. And `guests` can be calculated from the number of adults, children and infants.
+- We have phone numbers in both `reservations` and `guests` table as we want to know which phone number belongs to which reservation (there would be this case where a user want their specific number set for only a specific reservation)
 
 ## Project Setup
 
@@ -94,7 +110,8 @@ $ rake test
 | ---------- | ------ | --------:|
 | PUT | /reservations/import| Imports a new reservation |
 
-We used PUT to enable changing of fields
+Notes:
+- We used PUT to enable changing of fields
 ```markdown
 The PUT method requests that the enclosed entity be stored under the supplied Request-URI. 
 If the Request-URI refers to an already existing resource, the enclosed entity SHOULD be 
@@ -103,7 +120,6 @@ If the Request-URI does not point to an existing resource, and that URI is capab
 of being defined as a new resource by the requesting user agent, the origin server 
 can create the resource with that URI.
 ```
-
 Therefore I think PUT method can "mimic" upsert operation that is suitable for this case
 
 ## Use Case Examples
@@ -190,10 +206,10 @@ Saved data in DB:
 2.4.10 :005 > Reservation.all
   Reservation Load (0.7ms)  SELECT "reservations".* FROM "reservations"
  => #<ActiveRecord::Relation [#<Reservation id: 1, code: "YYY12345678", guest_id: 1, guest_phone: "[\"639123456789\"]", start_date: "2021-04-14", end_date: "2021-04-18", num_of_adults: 2, num_of_children: 2, num_of_infants: 0, status: "accepted", currency: "AUD", payout_price: 4200.0, security_price: 500.0, total_price: 4700.0, created_at: "2022-01-25 10:10:13", updated_at: "2022-01-25 10:10:13">, #<Reservation id: 2, code: "XXX12345678", guest_id: 1, guest_phone: "[\"639123456789\"]", start_date: "2021-03-12", end_date: "2021-03-16", num_of_adults: 2, num_of_children: 2, num_of_infants: 0, status: "accepted", currency: "AUD", payout_price: 3800.0, security_price: 500.0, total_price: 4300.0, created_at: "2022-01-25 10:10:13", updated_at: "2022-01-25 10:10:13">]> 
-2.4.10 :006 > Guest.all
 ```
 
 ```console
+2.4.10 :006 > Guest.all
   Guest Load (0.4ms)  SELECT "guests".* FROM "guests"
  => #<ActiveRecord::Relation [#<Guest id: 1, first_name: "Wayne", last_name: "Woodbridge", phone: "[\"639123456789\", \"639123456789\"]", email: "wayne_woodbridge@bnb.com", created_at: "2022-01-25 10:10:13", updated_at: "2022-01-25 10:21:04">]>
 ```
