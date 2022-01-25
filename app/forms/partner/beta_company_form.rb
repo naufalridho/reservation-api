@@ -43,7 +43,7 @@ module Partner
 
       reservation.code = reservation_code
       reservation.guest_id = guest_id
-      reservation.add_phone!(reservation_guest_phone_numbers)
+      reservation.add_phones!(reservation_guest_phone_numbers)
       reservation.start_date = reservation_start_date
       reservation.end_date = reservation_end_date
       reservation.num_of_adults = guest_details_number_of_adults

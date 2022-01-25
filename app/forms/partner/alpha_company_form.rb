@@ -26,7 +26,7 @@ module Partner
       guest.first_name = guest_first_name
       guest.last_name = guest_last_name
       guest.email = guest_email
-      guest.add_phone!([guest_phone])
+      guest.add_phones!([guest_phone])
 
       guest
     end
@@ -36,7 +36,7 @@ module Partner
 
       reservation.code = reservation_code
       reservation.guest_id = guest_id
-      reservation.add_phone!([guest_phone])
+      reservation.add_phones!([guest_phone])
       reservation.start_date = start_date
       reservation.end_date = end_date
       reservation.num_of_adults = adults

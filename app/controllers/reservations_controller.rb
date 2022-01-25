@@ -4,7 +4,7 @@ class ReservationsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def import
-    res = partner_form.submit
+    res = form.submit
     render json: { data: res }
   rescue Partner::InvalidPartnerError, ActiveRecord::RecordInvalid => e
     Rails.logger.error(tags: ['import'], message: e.message, backtrace: e.backtrace.take(5).join('/n') || '')
@@ -16,7 +16,7 @@ class ReservationsController < ApplicationController
 
   private
 
-  def partner_form
+  def form
     alpha_form = Partner::AlphaCompanyForm.new(params)
     return alpha_form if alpha_form.valid?
 

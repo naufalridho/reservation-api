@@ -3,7 +3,7 @@ class Guest < ActiveRecord::Base
 
   validates :email, :uniqueness => true
 
-  def add_phone!(new_phones)
+  def add_phones!(new_phones)
     phones = phone ? JSON.parse(phone) : []
     phones.concat(new_phones)
     self.phone = phones.uniq
