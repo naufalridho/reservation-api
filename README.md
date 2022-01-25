@@ -6,7 +6,7 @@ for example a reservation payload from Airbnb and a reservation payload from Boo
 
 For this, I used _Form Object Pattern_ and _Polymorphism_ to approach the solution
 
-## Problem statement
+## Problem Statement
 There's a case where we need to have a single API that is able to parse different reservation payloads.
 The payloads are given by these json data:
 
