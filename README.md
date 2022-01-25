@@ -110,4 +110,32 @@ $ curl --request PUT \
   		"total_paid_amount_accurate": "4300.00"
   	}
   }'
+
+
+## Manual Testing
+1. Payload #1 case
+Got 200 response and successfully saved in the DB
+![Screenshot from 2022-01-25 17-17-31](https://user-images.githubusercontent.com/42140237/150976358-ef04dc37-b75c-4f04-962c-eed2134958d5.png)
+
+2. Payload #2 case (after Payload #1 done)
+Got 200 response and successfully saved in the DB
+![Screenshot from 2022-01-25 17-21-28](https://user-images.githubusercontent.com/42140237/150976507-6f51c0c1-b640-4508-b6e7-38ffe7c6837b.png)
+
+Saved data in DB:
 ```
+2.4.10 :005 > Reservation.all
+  Reservation Load (0.7ms)  SELECT "reservations".* FROM "reservations"
+ => #<ActiveRecord::Relation [#<Reservation id: 1, code: "YYY12345678", guest_id: 1, guest_phone: "[\"639123456789\"]", start_date: "2021-04-14", end_date: "2021-04-18", num_of_adults: 2, num_of_children: 2, num_of_infants: 0, status: "accepted", currency: "AUD", payout_price: 4200.0, security_price: 500.0, total_price: 4700.0, created_at: "2022-01-25 10:10:13", updated_at: "2022-01-25 10:10:13">, #<Reservation id: 2, code: "XXX12345678", guest_id: 1, guest_phone: "[\"639123456789\"]", start_date: "2021-03-12", end_date: "2021-03-16", num_of_adults: 2, num_of_children: 2, num_of_infants: 0, status: "accepted", currency: "AUD", payout_price: 3800.0, security_price: 500.0, total_price: 4300.0, created_at: "2022-01-25 10:10:13", updated_at: "2022-01-25 10:10:13">]> 
+2.4.10 :006 > Guest.all
+```
+
+```
+  Guest Load (0.4ms)  SELECT "guests".* FROM "guests"
+ => #<ActiveRecord::Relation [#<Guest id: 1, first_name: "Wayne", last_name: "Woodbridge", phone: "[\"639123456789\", \"639123456789\"]", email: "wayne_woodbridge@bnb.com", created_at: "2022-01-25 10:10:13", updated_at: "2022-01-25 10:21:04">]>
+```
+
+We can see that we got 2 reservations and only 1 guests as we keep the guest email unique.
+
+3. Invalid payload case
+Got 422 response
+![image](https://user-images.githubusercontent.com/42140237/150976849-eece37e0-1507-46d7-9c34-60ded2477b7c.png)
