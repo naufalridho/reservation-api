@@ -98,7 +98,7 @@ $ rake db:migrate
 $ rails server
 ```
 
-**Run all RSpec tests and Rubocop**:
+**Run all RSpec tests**:
 
 ```console
 $ rake test
