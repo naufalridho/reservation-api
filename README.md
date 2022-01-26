@@ -239,4 +239,4 @@ end
 Notes:
 - For a nested field, like `number_of_adults` in the previous example,
 Symbols look like this: `:[parent_field]_[nested_field]`. In the 
-previous case, the symbol is `guest_details_number_of_adults`.
+previous case, the symbol is `:guest_details_number_of_adults`.
