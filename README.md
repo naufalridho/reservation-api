@@ -2,7 +2,7 @@
 
 This repo demonstrates how to create a reservation import API using Ruby on Rails.
 The problem is, we need to have a single API that can consume different kinds of payload from different partners, 
-for example a reservation payload from Airbnb and a reservation payload from Booking.com.
+for example a reservation payload from Airbnb and Booking.com.
 
 For this, I used _Form Object Pattern_ and _Polymorphism_ to approach the solution
 
@@ -221,3 +221,22 @@ We can see that we got 2 reservations and only 1 guests as we keep the guest ema
 Got 422 response
 
 ![image](https://user-images.githubusercontent.com/42140237/150976849-eece37e0-1507-46d7-9c34-60ded2477b7c.png)
+
+## Development
+
+To add a new partner, we can make a new class in `app/forms/partner` directory 
+with this signature:
+```ruby
+module Partner
+  class AlphaCompanyForm < Normalizer
+    attr_accessor :reservation_code # and so on
+    validates_presence_of :reservation_code # and so on
+    def submit
+    end
+  end
+end
+```
+Notes:
+- For a nested field, like `number_of_adults` in the previous example,
+Symbols look like this: `:[parent_field]_[nested_field]`. In the 
+previous case, the symbol is `guest_details_number_of_adults`.
